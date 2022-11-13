@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if job %}
+<h3>Edit {{job.name}}</h3>
+{% else %}
+<h3>Add Job</h3>
+{% endif %}
+<div class='row'>
+    <div class='col-md-8 col-sm-12'>
+        <form method='POST' action='/jobs{% if job %}/{{job.key().id()}}{% endif %}'>
+            <label class='form-label' for='name'>Title: </label>
+            <input class='form-control' type='text' name='name' value='{% if job %}{{job.name}}{% endif %}'>
+            <br>
+            <label class='form-label' for='description'>Description:</label>
+            <br>
+            <textarea class='form-control' name='description' cols=100 rows=12>{% if job %}{{job.description}}{% endif %}</textarea>
+            <br><br>
+            <input class='btn btn-primary' type='submit' value='{% if job %}Save{% else %}Add{% endif %}'>
+            <a href="/admin#jobs" class='btn btn-default'>Cancel</a>
+        </form>
+    </div>
+</div>
+<br><br>
+{% endblock %}

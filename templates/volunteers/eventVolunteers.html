@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class='table table-condensed'>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+  </tr>
+  </thead>
+  <tbody>
+    {% for volunteer in volunteerList %}
+    <tr>
+      <td>{{ volunteer.username }}</td>
+      <td>{{ volunteer.email }}</td>
+      <td>{{ volunteer.phone }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock content %}

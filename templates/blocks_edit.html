@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{page.title}}
+{% endblock %}
+
+{% block content %}
+
+<h3>{{job.job().name}}</h3>
+<h4>{{block.starttime|readabledate}} to {{block.endtime|readabledate}}</h4>
+<br>
+<div style='border: 1px solid #AAA; border-radius: 5px; padding: 20px;'>
+    <form method="POST" action="/blocks/{{block.key().id()}}/_edit">
+        <div class="form-group form-horizontal">
+        <label for='start'>Start Time: </label>
+        <input class='form-control' type="datetime-local" name="start" value="{{block.starttime|entrydate}}" />
+        <br>
+        <label for='end'>End Time: </label>
+        <input class='form-control' type="datetime-local" name="end" value="{{block.endtime|entrydate}}" />
+        </div>
+        <input class='btn btn-primary' type='submit' value='Save'>
+        <a class='btn btn-default' href='/jobs/{{block.eventJobid}}'>Back</a>
+    </form>
+</div>
+<br><br>
+
+<br>
+
+<div style='border: 1px solid #AAA; border-radius: 5px; padding: 20px;'>
+    <strong>{{job.positions-(block.volids|listcount)}} Available Spots</strong>
+    <br><br>
+    <table class='table table-condensed table-hover table-bordered'>
+    <thead>
+    <tr>
+        <th>Name</th><th>Phone</th><th>Email</th><th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vol in blockvolunteers %}
+    <tr>
+        <td>{{vol.name}}</td>
+        <td>{{vol.phone}}</td>
+        <td>{{vol.email}}</td>
+        <td>
+            <form method='post' action='/blocks/{{block.key().id()}}'>
+                <input class='btn btn-small btn-primary' type="submit" value="remove" />
+                <input type="hidden" name="volid" value="{{vol.key().id()}}" />
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    
+    <h4>Add Volunteer to Time Block</h4>
+    <br>
+    <form method="post" action="/blocks/{{block.key().id()}}/_addvol">
+        <label for='volunteer'>Volunteer:</label>
+        <select name='volunteer'>
+            {% for vol in volunteers %}
+                <option class='form-control' value='{{vol.key().id()}}'>{{vol.name}}</option>
+            {% endfor %}
+        </select><br><br>
+        <input class='btn btn-primary' type="submit" value="Add" />
+    </form>
+</div>
+<br>
+{% endblock %}

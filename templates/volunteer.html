@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    {% if user %}
+    <div class='col-md-2 col-sm-3 col-xs-12'>
+        <ul>
+            <li><a href='/'>Home</a></li>
+            <li><a href='/admin'>Admin</a></li>
+            <li><a href='/schedule'>Schedule</a></li>
+        </ul>
+        
+    </div>
+    {% endif %}
+    <div class='col-md-10 col-sm-9 col-xs-12'>
+        <div class='reg-vols'>
+            <h3>{{volunteer.name}}</h3>
+            {% if user and not user.volunteer %}
+            <span><strong>Phone:</strong> {{volunteer.phone}}</span><br>
+            <span><strong>Email:</strong> {{volunteer.email}}</span><br>
+            {% endif %}
+            <h2>Volunteering</h2>
+            {% for event in events %}
+                {% if event.hasVolunteer(volunteer.key().id()) %}
+                    <h3>{{event.eventname}}</h3>
+                    <table class='table tabled-condensed'>
+                        {% for job in event.jobs() %}
+                            {% if job.hasVolunteer(volunteer.key().id()) %}
+                                <tr>
+                                    <td><strong>{{job.name()}}</strong></td>
+                                    {% for block in job.blocks() %}
+                                        {% if volunteer.key().id() in block.volids %}
+                                            <td>{{block|timeblock}}<td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            {% endfor %}
+         
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+ {% extends "base.html" %}
+
+{% block content %}
+<div class='print'>
+  {% for job in event.jobsList %}
+    <h3>{{job.name()}}</h3>
+    <table class=''>
+    {% for block in job.blocksList %}
+      <tr>
+        <td class='col-sm-2 poster_date'>{{block.starttime|entrydate("%b. %d %I:%M%p")}}</td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+      </tr>
+      <tr>
+        <td class='col-sm-2'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+        <td class='col-sm-2 underline'></td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endfor %}
+</div>
+{% endblock content %}

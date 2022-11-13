@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{page.title}}
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="/events">
+    <div class="form-group">
+    <label for='eventname'>Event Name: </label>
+    <input class='form-control' type='text' name='eventname' value=''>
+    <br>
+    <label for='startdate'>Start Date: </label>
+    <input class='datepicker form-control' type="text" name="startdate" value="{{now}}" />
+    <br>
+    <label for='enddate'>End Date: </label>
+    <input class='datepicker form-control' type="text" name="enddate" value="{{now}}" />
+    </div>
+    <br>
+    <input class='btn btn-primary' type='submit' value='Add'>
+    <a class='btn btn-default' href='/admin#events'>Cancel</a>
+</form>
+
+<script>
+$(document).ready(function () {
+    $('.datepicker').datepicker();
+});
+
+</script>
+{% endblock %}

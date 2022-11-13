@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{page.title}}
+{% endblock %}
+
+{% block content %}
+<h2>{{event.eventname}}</h1>
+<br>
+<p>
+  Only choose time slots that you are available for.
+  <strong>Check <a href='https://mods.usetopscore.com/ch-wkd-schedule'>here</a> for the schedule</strong><br>
+  It is up to you to ensure that you are available and to arrive before your shift starts.<br>
+  Other volunteers may have games to get too!<br>
+</p>
+<p>
+  All volunteer shifts are subject to ending early or being cancelled a the descretion of Volunteer Central at the event
+</p>
+<br>
+<form method="POST" action="/events/{{event.key().id()}}/register">
+    <div class="form-group">
+        {% if errors and errors['blockerr'] %}
+        <div class="alert alert-danger">
+          One or more of the selected shifts conflict with each other. Please review your selection.
+        </div>
+        {% endif %}
+        <div class='form-group'>
+            <table class='table'>
+                <!--<tbody>-->
+                    {% for job in event.jobs(order='startTime') %}
+                    <tr>
+                        {% if job.blocks() %}
+                            <td colspan='{{job.blocks()|listcount + 1}}'>
+                              <strong>{{job.name()}}</strong>
+                            </td>
+                            </tr>
+                            <tr>
+                                <td class='text-right'>
+                                  <strong><br>Start:<br>End:</strong>
+                                </td>
+                            {% for block in job.blocks('starttime') %}
+                                <td class='text-center'>
+                                    {{block.starttime|entrydate("%b. %d")}}<br>
+                                    {{block|timeblock}}<br>
+                                    <strong>{{block.positions-(block.volids|listcount)}} Spots<strong><br>
+                                    <input  name='blocks' type='checkbox' value='{{block.key().id()}}'
+                                           {% if [fields,block]|waschecked or user.key().id() in block.volids %}checked{% endif %}
+                                           {% if user.key().id() in block.volids %}disabled{% endif %}
+                                           {% if (block.positions-(block.volids|listcount) < 1) %}disabled{% endif %} >
+                                </td>
+                            {% endfor %}
+                            </tr>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                <!--</tbody>-->
+            </table>
+        </div>
+    </div>
+    <input class='btn btn-primary' type='submit' value='Register'>
+    <a href='/' class='btn btn-default'>Cancel</a>
+</form>
+<br>
+{% endblock %}

@@ -1,0 +1,51 @@
+.small-menu {
+    text-align: right;
+}
+
+.large-text {
+    font-size: 13pt;
+}
+
+.search-box {
+    width: 230px !important;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.full {
+  background-color: rgb(60,60,60);
+  color: rgb(220,220,220);
+}
+
+.registered {
+  background-color: rgb(60,100,240);
+  color: #EEE;
+}
+
+.poster_users {
+  list-style: none;
+}
+
+.poster_users li {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.poster_date {
+  font-size: 1.25em;
+}
+
+.checkbox {
+  width: 20px;
+  height: 15px;
+  border: 2px solid black !important;
+}
+
+.underline {
+  display: inline-block !important;
+  border-bottom: 2px solid black;
+  margin-left: 10px !important;
+  height: 45px;
+}

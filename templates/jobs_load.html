@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-md-6 col-xs-12'>
+        <form action='/jobs/_load' method="POST">
+            <label class='form-label' for='jsondata'>JSON Data</label>
+            <textarea class='form-control' name='jsondata'></textarea>
+            <br><br>
+            <input type='submit' value='Load' />
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='print'>
+  {% for job in event.jobsList %}
+    <h2>{{job.name()}}</h2>
+    <table class='table table-condensed'>
+    {% for block in job.blocksList %}
+      <tr>
+        <td class='col-sm-4 poster_date'>{{block.starttime|entrydate("%b. %d %I:%M%p")}}</td>
+        <td class='col-sm-8'>
+          <ul class='poster_users'>
+          {% for volunteer in block.volunteers() %}
+            <li>{{volunteer.username}}</li>
+          {% endfor %}
+          </ul>
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endfor %}
+</div>
+
+{% endblock content %}

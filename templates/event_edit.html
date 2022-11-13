@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Event {{ event.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-sm-12'>
+            <a class='btn btn-default' href='/admin#events'>Back</a>
+            <h2>{{ event.eventname }}</h2>
+            <p>{{ event.startdate|dateformat('%A %B %d, %Y') }} to {{ event.enddate|dateformat('%A %B %d, %Y') }}</p>
+            <ul>
+                <li><a href="/events/{{event.key().id()}}/schedule">Schedule</a></li>
+                <li><a href="/events/{{event.key().id()}}/_poster">Poster Schedule</a></li>
+                <li><a href="/events/{{event.key().id()}}/_signinsheet">Signin Sheet</a></li>
+                <li><a href="/events/{{event.key().id()}}/_volunteers">Volunteer Contact Info</a></li>
+            </ul>
+            <div>
+                <h3>Edit Event</h3>
+                <form method="POST" action="/events/{{event.key().id()}}" role='form' class='form-horizontal'>
+                    <div class="form-group">
+                        <label for='eventname' class='control-label col-sm-2'>Name: </label>
+                        <div class='col-sm-10'>
+                            <input class='form-control' type='text' name='eventname' value='{{event.eventname}}'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for='startdate' class='control-label col-sm-2'>Start Date: </label>
+                        <div class='col-sm-10'>
+                            <input class='datepicker form-control' type="text" name="startdate" value="{{event.startdate|entrydate('%Y-%m-%d')}}" />
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='enddate' class='control-label col-sm-2'>End Date: </label>
+                        <div class='col-sm-10'>
+                            <input class='datepicker form-control' type="text" name="enddate" value="{{event.enddate|entrydate('%Y-%m-%d')}}" />
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='active' class='control-label col-sm-2'>Active: </label>
+                        <div class='col-sm-10'>
+                            <input class='datepicker form-control' type="checkbox" name="active" {% if event.active %}checked{% endif %} />
+                        </div>
+                    </div>
+                    <br>
+                    <div class='form-group'>
+                        <div class='col-sm-offset-2 col-sm-2'>
+                            <input class='btn btn-primary' type='submit' value='Update'>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <div>
+                <h3>Event Jobs</h3>
+                <table class='table table-condensed table-hover table-bordered'>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Num. Positions</th>
+                            <th>Available Positions</th>
+                            <th>Blocks</th>
+                            <th>Positions/Block</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for ejob in event.jobs("startTime") %}
+                        <tr>
+                            <td>{{ ejob.job().name }}</td>
+                            <td>{{ ejob.totalPositions() }}</td>
+                            <td>{{ ejob.availablePositions() }}</td>
+                            <td>{{ ejob.blocks()|listcount }}</td>
+                            <td>{{ ejob.positions }}</td>
+                            <td><a href="/events/{{event.key().id()}}/jobs/{{ejob.key().id()}}/">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a class='btn btn-default' href='/events/{{event.key().id()}}/_update'>Process Jobs</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class='row' id='addjobs'>
+            <div class='col-md-8 col-sm-12'>
+                <h3>Add Jobs</h3>
+                <ul>
+                    <li><a href='#' onclick="return selectall();">Select All</a></li>
+                    <li><a href='#' onclick="return deselectall();">Deselect All</a></li>
+                </ul>
+                {% for err in errors.values() %}
+                    <div class='alert alert-danger'>{{err}}</div>
+                {% endfor %}
+                <form method="POST" action="/events/{{event.key().id()}}/_add">
+                    <label class='form-label'>Jobs: </label>
+
+                    <table class='table table-condensed'>
+                        {% for job in jobs %}
+                            <tr>
+                                <td><input class='checkbox' type='checkbox' name='job-{{job.key().id()}}' {% if job.key().id() in selected_jobs %}checked=checked{% endif %} /></td>
+                                <td>{{ job.name }}</td>
+                                <td><input class='form-control' type='number' min=0
+                                           value={% if selected_positions[job.key().id()] %}{{selected_positions[job.key().id()]}}{%else%}0{%endif%}
+                                           name='positions-{{job.key().id()}}'></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <input class='btn btn-primary' type='submit' value="Add Job(s)" id='addjobbtn' />
+                </form>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+</div>
+
+<script type="text/javascript">
+
+function selectall() {
+    $('.checkbox').prop('checked', 'checked');
+    $('input[name^="position"]').val(2);
+    $("#addjobs").scrollTop($("#addjobs").scrollTop() - 100);
+    return false;
+}
+
+function deselectall() {
+    //this.preventDefault();
+    $('.checkbox').prop('checked', false);
+    $('input[name^="position"]').val(0);
+    return false;
+}
+
+$(document).ready(function () {
+    console.log("Ready");
+    console.log($(".alert-danger"));
+
+    if ( {{errors|listcount}} > 0 ) {
+        location.hash = "#addjobs";
+    }
+
+    $(".datepicker").datepicker();
+});
+
+
+</script>
+
+{% endblock %}

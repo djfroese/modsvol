@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-md-10 col-sm-9 col-xs-12'>
+        <div class='reg-vols'>
+            <h2>Schedule</h2>
+            <!-- <p>
+              You can only leave a shift here at most 7 days before the events starts.<br>
+              Within 7 days of the event starting, please contact <a href="mailto:volunteer@mods.mb.ca">volunteer@mods.mb.ca</a> to leave a shift.
+            </p> -->
+            {% for event in events %}
+                {% if event.blocks != [] %}
+                <h3>{{event.eventname}} <small><a href='/events/{{event.key().id()}}/register'>Add Shifts</a></small></h3>
+                  {% if event.registrationClosed() %}
+                    <!-- <div class='alert alert-warning'>Less than 7 days until this event starts. You may only register for new shifts.</div> -->
+                  {% endif %}
+                    <table class='table tabled-condensed'>
+                        {% for block in event.blocks %}
+                            <tr>
+                                <td class='col-sm-2'  style='text-align:right;'><strong>{{block.jobName()}}</strong></td>
+                                <td class='col-sm-3'>
+                                  {{block.starttime|entrydate('%b. %d, %Y<br>%I:%M%p')}} to
+                                  {{block.endtime|entrydate('%I:%M%p')}}
+                                </td>
+                                <td class='col-sm-2'>
+                                  {% if not event.registrationClosed() %}
+                                  <form action='/blocks/{{block.key().id()}}/_leave' method="POST">
+                                    <input class='btn btn-default' type='submit' value='Leave'>
+                                  </form>
+                                  {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

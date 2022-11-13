@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Administration
+{% endblock %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-3'>
+        <h4>Events</h4>
+        {% for event in events %}
+        <a href='/manage/event/{{event.key().id()}}'>-{{event.eventname}}</a>
+        {% endfor %}
+        <h4><a href="/manager/volunteers">Volunteers</a>
+    </div>
+    <div class='col-9'>
+        <div>
+        <h2>{{selectedevent.eventname}}</h2>
+            <h4>Time Blocks</h4>
+            <table class='table table-bordered table-condensed'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Start Time</th><th>End Time</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for block in blocks %}
+                    <tr>
+                        <td>{{block.blockname}}</td>
+                        <td>{{block.starttime}}</td>
+                        <td>{{block.endtime}}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href='/blocks'>Add Time Block</a>
+        </div>
+        <div>
+            <h4>Jobs</h4>
+            <table class='table table-bordered table-condensed'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Positions</th><th></th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{job.name}}</td>
+                        <td>{{job.positions}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href='/jobs'>Add Job</a>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

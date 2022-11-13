@@ -1,0 +1,77 @@
+.datetime-window {
+    background-color: white !important;
+    text-align: center;
+    width: 330px;
+    height: auto;
+    border: 1px solid #333 !important;
+    padding: 8px;
+    border-radius: 4px !important;
+    font-family: sans-serif;
+    font-size: 9pt;
+    position: absolute;
+}
+
+.month-title {
+    font-size: 12pt;
+}
+
+.month-title button {
+    text-decoration: none;
+    color: black;
+}
+
+.month-title span {
+    width: 190px;
+    display: inline-block;
+}
+
+.dates td {
+    border-radius: 2px;
+    margin: 0px;
+    padding: 0px;
+    width: 50px;
+    height: 30px;
+    border: 1px solid #DDD;
+    font-size: 10pt;
+}
+
+.dates td:hover {
+    background-color: #EEE;
+    color: black;
+    border: 1px solid #333;
+}
+
+.month {
+    border-spacing: 5px;
+    border-collapse: separate;
+    table-layout: fixed;
+}
+
+month table thead tr {
+    border: 1px solid #DDD;
+}
+
+.today {
+    background-color: #5588FF;
+    color: white;
+}
+
+.dates .today:hover {
+    background-color: #a6d5fc;
+    color: #0163bf;
+}
+
+input.datepicker[readonly] {
+    cursor: default !important;
+    background-color: white !important;
+}
+
+.eitherside {
+    background-color: #555555;
+    color: #CCCCCC;
+}
+
+.ui-time {
+    width: 300px;
+    margin-top: 50px;
+}

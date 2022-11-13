@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Event {{ event.name }}{% endblock %}
+
+{% block content %}
+
+<div class='container'>
+    <a class='btn btn-default' href='/events/{{event.key().id()}}'>Back</a>
+    <div>
+        <h2>{{job.name()}} <small>{{ event.eventname }}</small></h2>
+        <div class='alert alert-info'>
+            <h4>Event Starts On <strong>{{event.startdate|readabledateonly}}</strong> and Ends <strong>{{event.enddate|readabledateonly}}</strong></h4>
+        </div>
+        <h3>Time Blocks</h3>
+        <div>
+            <table class='table table-condensed table-hover table-bordered'>
+                <thead>
+                <tr>
+                    <th>Start Time</th><th>End Time</th><th>Remaining Spots</th><th>Total Spots</th><th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for block in job.blocks('starttime') %}
+                <tr>
+                    <td>{{block.starttime}}</td>
+                    <td>{{block.endtime}}</td>
+                    <td>{{block.positions-(block.volids|listcount)}}</td>
+                    <td>{{block.positions}}</td>
+                    <td>
+                        <a class='btn btn-sm btn-primary' href="/blocks/{{block.key().id()}}">edit</a>
+                        <form class='inline' method="post" action='/blocks/{{block.key().id()}}/_del'>
+                            <input class='btn btn-sm btn-default' type="submit" value="delete" />
+                        </form>
+
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class='row'>
+            <div class='col-md-6 col-sm-8 col-xs-12'>
+                <h3>Add Time Block</h3>
+                <div class='alert alert-info'>
+                    Click on the <strong>Date</strong> to choose and then use the <strong>Slider</strong> to set the time.
+                </div>
+                <div class='alert alert-info'>
+                    Check <strong>Extends</strong> to have the last block fill any remain time less than the interval.
+                </div>
+                <div class='alert alert-info'>
+                    Check <strong>Overlap</strong> and set the Overlap Margin. The margin can be a maximum of half the interval.
+                    Jobs will start the length of the <strong>Margin</strong> before the end of the previous block.
+                </div>
+                {% for err in errors.values() %}
+                    <div class='alert alert-danger'>
+                        {{err}}
+                    </div>
+                {% endfor %}
+                <form method="POST" action="/events/{{event.key().id()}}/jobs/{{job.key().id()}}/" role='form'>
+                    <div class="form-group">
+                        <label for='starttime'>Start Time: </label>
+                        <input class='form-control datepicker' type="text" name="starttime" value="{{now|entrydate}}" />
+                        <input class='form-control' type='range' min=0 max=1439 name='stime' value=0 step=15 />
+
+                    </div>
+                    <div class="form-group">
+                        <label for='endtime'>End Time: </label>
+                        <input class='form-control datepicker' type="text" name="endtime" value="{{now|entrydate}}" />
+                        <input class='form-control' type='range' min=0 max=1439 name='etime' value=0 step=15 />
+                    </div>
+                    <div class="form-group">
+                        <label class='form-label' for='interval'>Interval (in hours): </label>
+                        <input class='form-control' type='number' min=0 value=0 step=0.5 name='interval' />
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type='checkbox' name='extends' /> Extends
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type='checkbox' name='overlap' /> Overlap
+                        </label>
+                    </div>
+                    <div class='form-group'>
+                        <label>Overlap Margin: </label>
+                        <input class='form-control' type='number' min=0 value=0 step=0.5 name='margin' disabled />
+                    </div>
+                    <input class='btn btn-primary' type='submit' value='Add' />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<script>
+$('.datepicker').datepicker();
+
+function timefnum(minutes) {
+    hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    if (minutes == 0) {
+        minutes = "00"
+    }
+
+    if (hours < 10) {
+        hours = "0"+hours;
+    }
+
+    return hours + ":" + minutes;
+}
+
+$("input[name='overlap']").change(function () {
+    $("input[name='margin']").prop("disabled",!$("input[name='margin']").prop("disabled"))
+});
+
+$(document).ready(function () {
+    $("input[name='stime']").change(function () {
+        $("input[name='starttime']").val($("input[name='starttime']").val().split("T")[0]+"T"+timefnum($(this).val()));
+    });
+
+    $("input[name='etime']").change(function () {
+        $("input[name='endtime']").val($("input[name='endtime']").val().split("T")[0]+"T"+timefnum($(this).val()));
+    });
+});
+
+
+</script>
+
+{% endblock %}

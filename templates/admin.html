@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Administration
+{% endblock %}
+
+{% block content %}
+<script>
+  $(document).ready(function () {
+    hash = window.location.hash;
+    selector = '#adminTabs a[href="' + hash +'"]';
+    console.log(selector);
+    $(selector).tab('show');
+  });
+</script>
+<div class='row'>
+    <div class='col-md-12 col-sm-12'>
+        <h2>Administration</h2>
+    </div>
+</div>
+<div class='row'>
+    <div class='col-md-10 col-sm-10'>
+      <ul class='nav nav-tabs' role='tablist' id='adminTabs'>
+        <li class='active'><a href="#events" role="tab" data-toggle="tab">Events</a></li>
+        <li><a href="#jobs" role="tab" data-toggle="tab">Jobs</a></li>
+        <li><a href="#users" role="tab" data-toggle="tab">Users</a></li>
+      </ul>
+      <div class='tab-content'>
+        <div id='users' class='tab-pane fade'>
+            <br>
+            <div class='btn-group'>
+              <a class='btn btn-default' href='#'><span class='glyphicon glyphicon-plus'><br>New</span></a>
+            </div>
+            <br>
+            <table class='table table-hover table-condensed'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Active</th><th>Read-only Access</th><th>Volunteer/Admin</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for xuser in users %}
+                    <tr>
+                        <td>{{xuser.username}}</td>
+                        <td>{% if xuser.active %}Yes{% else %}No{% endif %}</td>
+                        <td>{% if xuser.readonly %}Yes{% else %}No{% endif %}</td>
+                        <td>{% if xuser.volunteer %}Volunteer{% else %}Admin{% endif %}</td>
+                        <td><a href="/admin/user/{{xuser.key().id()}}">Edit User</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id='events' class='tab-pane fade in active'>
+            <br>
+            <div class='btn-group'>
+              <a class='btn btn-default' href='/events'><span class='glyphicon glyphicon-plus'><br>New</span></a>
+            </div>
+            <table class='table table-hover table-condensed'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th></th><th>Start Date</th><th>End Date</th><th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{event.eventname}}</td>
+                        <td><a href="/events/{{event.key().id()}}/schedule">Schedule</a></td>
+                        <td>{{event.startdate|entrydate("%Y-%m-%d")}}</td>
+                        <td>{{event.enddate|entrydate("%Y-%m-%d")}}</td>
+                        <td><a href='/events/{{event.key().id()}}'>Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id='jobs' class='tab-pane fade'>
+            <br>
+            <div class='btn-group'>
+              <a class='btn btn-default' href='/jobs'><span class='glyphicon glyphicon-plus'><br>New</span></a>
+            </div>
+            <br>
+            <table class='table table-condensed table-hover'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Description</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{job.name}}</td>
+                        <td>{{job.description[:60]}}</td>
+                        <td><a href='/jobs/{{job.key().id()}}'>Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+</div>
+<br><br>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-sm-8'>
+        <p>
+        <h4>Hello Current and Prospective Volunteers,</h4>
+        </p>
+        <p>
+        Thank you for showing interest in Volunteering at MODS events.   We hope that this website will allow MODS Volunteers to see exactly how they can contribute to successful tournaments and events.
+        </p>
+        <p>
+          Our goal is to make volunteering convenient and organized for everyone.
+        </p>
+        <p>
+        This online calendar should help us schedule people volunteers and let users check their scheduled shifts.  During the weekend, we will have a Volunteer Central where volunteers should check in daily to confirm their shifts and get updates.  Some volunteer positions will have different instructions, materials needed, or procedures so we’re hoping that you will all come by to say “hi”.
+        </p>
+        <p>
+        You’ll notice that the jobs listed give a number of  “volunteers needed”, this is referring to volunteer shifts.  We have done our best to schedule volunteer shifts to coincide with game time slots.  Of course sometimes volunteers may unavoidably be late to, or must leave early from games.  We recognize all of our volunteers for being flexible and thank them for sacrificing their time.
+        </p>
+        <p>
+        **This schedule is always subject to change until users finalize and confirm with Volunteer Central on the scheduled day.
+        </p>
+        <p>
+        <h4>Thank-you again for helping us all!</h4>
+        </p>
+    </div>
+</div>
+{% if events %}
+<div class='row'>
+    <div class='col-sm-5 col-xs-12'>
+        <h3>Events</h3>
+        <ul class='list-group'>
+        {% for event in events %}
+            <li class='list-group-item large-text'>
+                <span class='badge'>{{ event.availablePositions() }} Available</span>
+                <a href='/events/{{event.key().id()}}/register'>{{event.eventname}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% if events %}
+    <h2>Job Descriptions</h2>
+{% endif %}
+{% for event in events if event.jobs() %}
+    <h3>{{event.eventname}}</h3>
+    {% for job in event.jobs() if job.blocks() %}
+        <div style='border: 1px solid #aaa; border-radius: 8px; padding: 15px; margin-bottom: 10px;'>
+            <h4>{{ job.name() }}</h4>
+            {% if not job.startTime == None and not job.endTime == None %}
+                <h5>{{job.startTime|readabledate}} to {{job.endTime|readabledate}}</h5>
+            {% endif %}
+            <span>{{job.availablePositions()}} volunteers needed</span>
+            <br><br>
+            <p>{{job.job().description}}</p>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

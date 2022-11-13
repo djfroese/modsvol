@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='row'>
+  <h4>Enter your new password below.</h4>
+  <br>
+  <form action='/user/_changepw' method='post' role='form' class='form form-horizontal'>
+    <div class='form-group'>
+      <label class='control-label col-sm-2'>Old Password:</label>
+      <div class='col-sm-8'>
+        <input type='password' name='old_password' class='form-control'>
+      </div>
+    </div>
+    {% if errors['oldbad'] %}
+      <div class='alert alert-danger'>Your old password is not correct. Please try again.</div>
+    {% endif %}
+    <hr>
+    <div class='form-group'>
+      <label class='control-label col-sm-2'>Password:</label>
+      <div class='col-sm-8'>
+        <input type='password' name='password' class='form-control'>
+      </div>
+    </div>
+    {% if errors['mismatch'] %}
+      <div class='alert alert-danger'>The new passwords you entered to not match.</div>
+    {% endif %}
+    {% if errors['badpw'] %}
+      <div class='alert alert-danger'>The new password you chose is not valid. Make sure it's between 3 and 20 characters long.</div>
+    {% endif %}
+    <div class='form-group'>
+      <label class='control-label col-sm-2'>Confirm:</label>
+      <div class='col-sm-8'>
+        <input type='password' name='confirm' class='form-control'>
+      </div>
+    </div>
+    <div class='col-sm-offset-2 ol-sm-2'>
+      <input class='btn btn-primary' type='submit' value='Change Password'>
+      <a class='btn btn-default' href='/'>Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock content %}

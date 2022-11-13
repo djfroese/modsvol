@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    Username: {{euser.username}}
+    <br>
+    Email: {{euser.email}}
+    <br>
+    Phone: {{euser.phone}}
+    <br>
+    <hr>
+    <br>
+    <form method="post" action="/admin/user/{{euser.key().id()}}">
+        <label for='newpassword'>New Password:</label>
+        <input type="password" name="newpassword" value="" />
+        <br>
+        <label for='confirm'>Confirm Password:</label>
+        <input type="password" name="confirm" value="" />
+        <hr>
+        Active: <input type="checkbox" name="active" {% if euser.active %}checked='checked'{% endif %}} />
+        <br>
+        Read-only: <input type="checkbox" name="readonly" {% if euser.readonly %}checked='checked'{% endif %}} />
+        <br>
+        Volunteer: <input type="checkbox" name="volunteer" {% if euser.volunteer %}checked='checked'{% endif %}} />
+        <br>
+        <br>
+        <input class='btn btn-primary' type="submit" name="submint" value="Save Changes" />
+        <a class='btn btn-default' href='/admin#users'>Cancel</a>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}

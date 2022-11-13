@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-md-2 col-sm-12'>
+        <ul>
+            <li><a href='/'>Home</a></li>
+            <li><a href='/admin'>Admin</a></li>
+            <li><a href='/schedule'>Schedule</a></li>
+        </ul>
+        
+    </div>
+    <div class='col-md-10 col-sm-12'>
+        <div class='reg-vols'>
+            <h2>Registered Volunteers</h2>
+            <table class='table table-bordered table-condensed'>
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Email</th><th>Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vol in volunteers %}
+                    <tr>
+                        <td><a href='/volunteers/{{vol.key().id()}}'>{{vol.name}}</a></td>
+                        <td>{{vol.email}}</td>
+                        <td>{{vol.phone}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

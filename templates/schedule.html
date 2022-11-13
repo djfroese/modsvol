@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-sm-2'>
+        <a class='btn btn-default' href="/events/{{event.key().id()}}">Back</a>
+    </div>
+</div>
+<br>
+<div class='row'>
+    <div class='col-md-10 col-sm-12'>
+        <table class='table table-condensed table-hover table-bordered'>
+            <tbody>
+                {% for job in event.jobs() %}
+                <tr>
+                    <td><strong>{{job.name()}}</strong></td>
+                    {% for block in job.blocks('starttime') %}
+                        <td class='text-center'>
+                            {{block|timeblock}} - {{job.positions-block.volids|listcount}} Available Spots<br>
+                            {% for u in user_list %}
+                                {% if u.key().id() in block.volids %}
+                                    <a href='/volunteers/{{u.key().id()}}'>{{u.username}}</a>
+                                    <br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
